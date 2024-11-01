@@ -1,0 +1,30 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  binaryTargets = ["native", "windows", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "sqlserver"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String   @id @default(uuid()) @map("id") // UUID para SQL Server
+  username     String
+  email        String   @unique
+  password     String
+  refreshToken String?
+  confirmed    Boolean  @default(false)
+  updatedAt    DateTime @updatedAt
+  createdAt    DateTime @default(now())
+}
+
+model Token {
+  id        String   @id @default(uuid()) @map("id") // UUID para SQL Server
+  userId    String   // Relacionamento pode ser ajustado conforme necessário
+  type      String
+  createdAt DateTime @default(now())
+}
